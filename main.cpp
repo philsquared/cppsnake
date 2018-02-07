@@ -15,6 +15,8 @@ struct rect {
     rect( int x, int y, int w, int h ) : left(x), top(y), width(w), height(h), right(x+w-1), bottom(y+h-1) {}
 };
 
+enum class direction{ up, down, left, right };
+
 int main() {
     keys::line_buffering_off();
 
@@ -22,24 +24,23 @@ int main() {
     std::cout << screen::save << screen::clear;
     auto dims = screen::dimensions();
 
-    rect stage = { 1, 2, dims.width, dims.height-1 };
+    rect stage( 1, 2, dims.width, dims.height-1 );
+    auto width = static_cast<size_t>( stage.width );
 
     std::mt19937 rng;
     rng.seed( std::random_device()() );
     std::uniform_int_distribution<> rnd_x( stage.left+1, stage.right-1 ), rnd_y( stage.top+1, stage.bottom-1 );
 
     std::cout
-            << bright_yellow.on_blue << move_to{ stage.left, 1 } << std::string( stage.width, ' ' )
+            << bright_yellow.on_blue << move_to{ stage.left, 1 } << std::string( width, ' ' )
             << black.on_grey
-            << move_to{ stage.left, stage.top } << std::string( stage.width, '|' );
+            << move_to{ stage.left, stage.top } << std::string( width, '|' );
     for( int i = stage.top+1; i < stage.bottom; ++i )
         std::cout << move_to{ stage.left, i } << '_' << move_to{ stage.right, i } << '_';
-    std::cout << move_to{ stage.left, stage.bottom } << std::string( stage.width, '|' );
+    std::cout << move_to{ stage.left, stage.bottom } << std::string( width, '|' );
     std::cout << reset_colour << hide_cursor;
 
     coords head{ stage.width/2, stage.height/2 };
-
-    enum class direction{ up, down, left, right };
 
     direction dir = direction::up;
 

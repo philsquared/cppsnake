@@ -3,7 +3,7 @@
 #include <termios.h>
 #include <sys/ioctl.h>
 
-#include <ostream>
+#include <iostream>
 
 namespace keys {
     const int STDIN_FILENO = 0;
@@ -45,12 +45,12 @@ namespace keys {
     auto get_key() -> key {
         if( !keys_available() )
             return { key::none };
-        key::type code = key::none;
-        scanf( "%c", &code );
+        key::type code;
+        std::cin >> reinterpret_cast<char&>( code );
         if( code == key::escape ) {
-            scanf( "%c", &code );
+            std::cin >> reinterpret_cast<char&>( code );
             if( code == key::open_square_bracket ) {
-                scanf( "%c", &code );
+                std::cin >> reinterpret_cast<char&>( code );
                 return { code };
             }
             else if( code == key::escape ){
