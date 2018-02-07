@@ -76,17 +76,16 @@ int main() {
 
         std::this_thread::sleep_for( std::chrono::milliseconds( frameTimeMs ) );
         auto key = keys::get_key();
-        if( key ) {
-            if( key == keys::key::escape )
-                break;
-            switch( key.key_type ) {
-                case keys::key::left_arrow: dir = direction::left; break;
-                case keys::key::right_arrow: dir = direction::right; break;
-                case keys::key::up_arrow: dir = direction::up; break;
-                case keys::key::down_arrow: dir = direction::down; break;
-                default: break;
-            }
+        if( key == keys::key::escape )
+            break;
+        switch( key.key_type ) {
+            case keys::key::left_arrow: dir = direction::left; break;
+            case keys::key::right_arrow: dir = direction::right; break;
+            case keys::key::up_arrow: dir = direction::up; break;
+            case keys::key::down_arrow: dir = direction::down; break;
+            default: break;
         }
+
         switch( dir ) {
             case direction::up: --head.y; break;
             case direction::down: ++head.y; break;
@@ -101,7 +100,7 @@ int main() {
                 << bright_yellow.on_red << " crash! "
                 << bright_yellow.on_blue << move_to{ stage.left + stage.width/2-20, stage.bottom }
                 << " game over, press ESCAPE twice to exit " << reset_colour << flush;
-            do  key = keys::get_key();
+            do key = keys::get_key();
             while( key != keys::key::escape);
             break;
         }
